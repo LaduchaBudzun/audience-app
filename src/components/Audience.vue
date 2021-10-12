@@ -26,7 +26,9 @@
       <td >{{audience.name}}</td>
 
    <td v-for="(cell,index) in time.slice(0, -1)" :key="index" >
-    
+     <!-- {{cell}} -->
+
+    <!-- <div v-if="DisplayEvents(cell)">111</div> -->
    </td>
  
       </tr>
@@ -91,9 +93,14 @@ export default {
   },
   methods:{
       meetingNumber(audience){
-             const arrEvents = audience.events
-             const num = Number(arrEvents[arrEvents.length - 1].name.split(" ")[1]) + 1
+          if(audience.events.length == 0){
+            return 1
+          }else{
+            const arrEvents = audience.events
+            const num = Number(arrEvents[arrEvents.length - 1].name.split(" ")[1]) + 1
             return num
+          }
+             
           },
       chooseTime(){
           let start = this.from
@@ -115,16 +122,15 @@ export default {
                 return true
               }else {
                   
-
-                this.audiences[audience.id - 1].events.push({
+                audience.events.push({
                   
-                      name: `совещание ${this.meetingNumber(audience)}`,
+                      name: `Совещание ${this.meetingNumber(audience)}`,
                       start: `${start.startTime}`,
                       startId: start.id,
                       end: `${end.startTime}`,
                       endId: end.id
                   })
-                  alert("Запись")
+                  alert(`Запись в ${audience.id} аудиторию`)
                  return false   
               }
             
@@ -142,29 +148,9 @@ export default {
            return this.time.slice((this.from.id + 1))
           
         },
-        // chooseTime() {
-        //   let deliteFrom 
-        //   let deliteBefore
-        //   this.audiences.forEach(audience =>{
-
-        //     if(audience.freeTime.id == this.from.id){
-        //       deliteFrom = audience.freeTime.id
-        //     }else{
-        //       return
-        //     }
-
-        //      if(audience.freeTime.id == this.before.id){
-        //       deliteBefore = audience.freeTime.id
-        //     }else{
-        //       return
-        //     }
-
-        //     let countDelite = deliteBefore - deliteFrom
-        //     if(deliteFrom,deliteBefore){
-        //       this.audiences[audience.id - 1].freeTime.splice(deliteFrom,countDelite)
-        //     }
-        //   })
-        // }
+       DisplayEvents() {
+          
+       }
     
       }
   }
