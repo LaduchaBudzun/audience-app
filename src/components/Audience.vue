@@ -33,7 +33,9 @@
     
   
   </table>
+  
   </div>
+  {{audiences}}
   </div>
 </template>
 
@@ -88,31 +90,45 @@ export default {
     }
   },
   methods:{
+      meetingNumber(audience){
+             const arrEvents = audience.events
+             const num = Number(arrEvents[arrEvents.length - 1].name.split(" ")[1]) + 1
+            return num
+          },
       chooseTime(){
           let start = this.from
           let end = this.before
-          this.audiences.forEach(audience =>{
-            audience.events.forEach(event =>{
+          
+          this.audiences.every(audience =>{
 
-              if(start.id >= event.startId && start.id < event.endId){
+            const evenStart = (element) => start.id >= element.startId && start.id < element.endId 
+            console.log(audience.events.some(evenStart));
+
+            const evenEnd = (element) => end.id > element.startId && end.id <= element.endId 
+            console.log(audience.events.some(evenEnd));
+
+              if(audience.events.some(evenStart)){
                 alert("Время начала занято")
-                return 
-              }else if(end.id > event.startId && end.id <= event.endId){
+                return true
+              }else if(audience.events.some(evenEnd)){
                   alert("Время конца занято")
-                return
+                return true
               }else {
+                  
+
                 this.audiences[audience.id - 1].events.push({
-                      name: `совещание ${Number(event.name.split(" ")[1]) + 1}`,
+                  
+                      name: `совещание ${this.meetingNumber(audience)}`,
                       start: `${start.startTime}`,
                       startId: start.id,
                       end: `${end.startTime}`,
                       endId: end.id
                   })
                   alert("Запись")
-                  return
+                 return false   
               }
-                  
-            })
+            
+          
 
           })
       },
