@@ -4,13 +4,13 @@
     <div>
        <span>От</span>
        <select v-model="from">
-            <option v-for="(tim,index) in time.slice(1)" v-bind:value="tim" :key="index">{{tim.start}}</option>
+            <option v-for="(tim,index) in time.slice(1,-1)" v-bind:value="tim" :key="index">{{tim.startTime}}</option>
         </select>
     </div>
        <div>
          <span>До</span>
        <select v-model="before">
-            <option v-for="(tim,index) in endLesson()" v-bind:value="tim" :key="index">{{tim.start}}</option>
+            <option v-for="(tim,index) in endLesson()" v-bind:value="tim" :key="index">{{tim.startTime}}</option>
         </select>
        </div>
        
@@ -19,14 +19,14 @@
   <div class="table-audience">
     <table class="table_blur">
     <tr>
-      <th v-for="(column,index) in time" :key="index" ><span class="time-table">{{column.start}}</span></th>
+      <th v-for="(column,index) in time" :key="index" ><span class="time-table">{{column.startTime}}</span></th>
     </tr>
 
     <tr v-for="(audience,index) in audiences" :key="index">
       <td >{{audience.name}}</td>
 
    <td v-for="(cell,index) in time.slice(0, -1)" :key="index" >
-
+    
    </td>
  
       </tr>
@@ -43,76 +43,110 @@ export default {
   data(){
     return{
       user:'',
-      from:{start:"8:00",id:1},
+      from:{startTime:"8:00",id:1},
       before:'',
       time:[
         {},
-        {start:"8:00",id:1},
-        {start:"8:30",id:2},
-        {start:"9:00",id:3},
-        {start:"9:30",id:4},
-        {start:"10:00",id:5},
-        {start:"10:30",id:6},
-        {start:"11:00",id:7},
-        {start:"11:30",id:8},
-        {start:"12:00",id:9},
-        {start:"12:30",id:10},
-        {start:"13:00",id:11},
-        {start:"13:30",id:12},
-        {start:"14:00",id:13},
-        {start:"14:30",id:14},
-        {start:"15:00",id:15},
-        {start:"15:30",id:16},
-        {start:"16:00",id:17},
-        {start:"16:30",id:18},
-        {start:"17:00",id:19},
-        {start:"17:30",id:20},
-        {start:"18:00",id:21},
+        {startTime:"8:00",id:1},
+        {startTime:"8:30",id:2},
+        {startTime:"9:00",id:3},
+        {startTime:"9:30",id:4},
+        {startTime:"10:00",id:5},
+        {startTime:"10:30",id:6},
+        {startTime:"11:00",id:7},
+        {startTime:"11:30",id:8},
+        {startTime:"12:00",id:9},
+        {startTime:"12:30",id:10},
+        {startTime:"13:00",id:11},
+        {startTime:"13:30",id:12},
+        {startTime:"14:00",id:13},
+        {startTime:"14:30",id:14},
+        {startTime:"15:00",id:15},
+        {startTime:"15:30",id:16},
+        {startTime:"16:00",id:17},
+        {startTime:"16:30",id:18},
+        {startTime:"17:00",id:19},
+        {startTime:"17:30",id:20},
+        {startTime:"18:00",id:21},
       ],
       audiences:[
         {name:"Аудитория 1",
-        freeTime:[
-        {},
-        {start:"8:00",id:1},
-        {start:"8:30",id:2},
-        {start:"9:00",id:3},
-        {start:"9:30",id:4},
-        {start:"10:00",id:5},
-        {start:"10:30",id:6},
-        {start:"11:00",id:7},
-        {start:"11:30",id:8},
-        {start:"12:00",id:9},
-        {start:"12:30",id:10},
-        {start:"13:00",id:11},
-        {start:"13:30",id:12},
-        {start:"14:00",id:13},
-        {start:"14:30",id:14},
-        {start:"15:00",id:15},
-        {start:"15:30",id:16},
-        {start:"16:00",id:17},
-        {start:"16:30",id:18},
-        {start:"17:00",id:19},
-        {start:"17:30",id:20},
-        {start:"18:00",id:21}]
-        },
-        {name:"Аудитория 2"},
-        {name:"Аудитория 3"},
-        {name:"Аудитория 4"},
+        id:1,
+         events: [
+          {
+            name: "совещание 1",
+            start: "9:00",
+            startId: 3,
+            end: "11:30",
+            endId: 8
+          }
+      ]},
+        {name:"Аудитория 2",id:2,events: []},
+        {name:"Аудитория 3",id:3,events: []},
+        {name:"Аудитория 4",id:4,events: []},
       ]
     }
   },
   methods:{
       chooseTime(){
-          console.log(this.before)
+          let start = this.from
+          let end = this.before
+          this.audiences.forEach(audience =>{
+            audience.events.forEach(event =>{
+
+              if(start.id >= event.startId && start.id < event.endId){
+                alert("Время начала занято")
+                return 
+              }else if(end.id > event.startId && end.id <= event.endId){
+                  alert("Время конца занято")
+                return
+              }else {
+                this.audiences[audience.id - 1].events.push({
+                      name: `совещание ${Number(event.name.split(" ")[1]) + 1}`,
+                      start: `${start.startTime}`,
+                      startId: start.id,
+                      end: `${end.startTime}`,
+                      endId: end.id
+                  })
+                  alert("Запись")
+                  return
+              }
+                  
+            })
+
+          })
       },
+      startLesson(){
+        
+           return this.time.slice((this.from.id))
+          
+        },
       endLesson(){
         
            return this.time.slice((this.from.id + 1))
           
         },
         // chooseTime() {
+        //   let deliteFrom 
+        //   let deliteBefore
         //   this.audiences.forEach(audience =>{
-        //     if(audience.freeTime.id){}
+
+        //     if(audience.freeTime.id == this.from.id){
+        //       deliteFrom = audience.freeTime.id
+        //     }else{
+        //       return
+        //     }
+
+        //      if(audience.freeTime.id == this.before.id){
+        //       deliteBefore = audience.freeTime.id
+        //     }else{
+        //       return
+        //     }
+
+        //     let countDelite = deliteBefore - deliteFrom
+        //     if(deliteFrom,deliteBefore){
+        //       this.audiences[audience.id - 1].freeTime.splice(deliteFrom,countDelite)
+        //     }
         //   })
         // }
     
