@@ -23,13 +23,18 @@
     </tr>
 
     <tr v-for="(audience,index) in audiences" :key="index">
-      <td >{{audience.name}}</td>
+ 
+        <td >{{audience.name}}</td>
+  
+  
+       <td v-for="(cell,index) in time.slice(1)" :key="index" >
+         <!-- {{cell}} -->
+    
+        <div v-if="DisplayEvents(audience,cell)">1</div>
+       </td>
+   
+   
 
-   <td v-for="(cell,index) in time.slice(0, -1)" :key="index" >
-     <!-- {{cell}} -->
-
-    <!-- <div v-if="DisplayEvents(cell)">111</div> -->
-   </td>
  
       </tr>
     
@@ -105,6 +110,10 @@ export default {
       chooseTime(){
           let start = this.from
           let end = this.before
+          if(start == "" || end == ""){
+            alert("Выберите время")
+            return
+          }
           
           this.audiences.every(audience =>{
 
@@ -148,8 +157,14 @@ export default {
            return this.time.slice((this.from.id + 1))
           
         },
-       DisplayEvents() {
-          
+       DisplayEvents(audience,cell) {
+
+         const even = (element) => cell.id >= element.startId && cell.id < element.endId 
+         
+
+         if (audience.events.some(even)){
+          return true
+         }
        }
     
       }
