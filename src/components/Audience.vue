@@ -23,13 +23,18 @@
     </tr>
 
     <tr v-for="(audience,index) in audiences" :key="index">
-      <td >{{audience.name}}</td>
+ 
+        <td >{{audience.name}}</td>
+  
+  
+       <td v-for="(cell,index) in time.slice(1)" :key="index" >
+         <!-- {{cell}} -->
+    
+        <div class="meeting-item" v-if="displayEvents(audience,cell)">Занято</div>
+       </td>
+   
+   
 
-   <td v-for="(cell,index) in time.slice(0, -1)" :key="index" >
-     <!-- {{cell}} -->
-
-    <!-- <div v-if="DisplayEvents(cell)">111</div> -->
-   </td>
  
       </tr>
     
@@ -37,7 +42,7 @@
   </table>
   
   </div>
-  {{audiences}}
+
   </div>
 </template>
 
@@ -78,7 +83,7 @@ export default {
         id:1,
          events: [
           {
-            name: "совещание 1",
+            name: "Совещание 1",
             start: "9:00",
             startId: 3,
             end: "11:30",
@@ -105,6 +110,10 @@ export default {
       chooseTime(){
           let start = this.from
           let end = this.before
+          if(start == "" || end == ""){
+            alert("Выберите время")
+            return
+          }
           
           this.audiences.every(audience =>{
 
@@ -115,10 +124,8 @@ export default {
             console.log(audience.events.some(evenEnd));
 
               if(audience.events.some(evenStart)){
-                alert("Время начала занято")
                 return true
               }else if(audience.events.some(evenEnd)){
-                  alert("Время конца занято")
                 return true
               }else {
                   
@@ -148,9 +155,21 @@ export default {
            return this.time.slice((this.from.id + 1))
           
         },
-       DisplayEvents() {
-          
-       }
+       displayEvents(audience,cell) {
+
+         const even = (element) => cell.id >= element.startId && cell.id < element.endId 
+         
+
+         if (audience.events.some(even)){
+          return true
+         }
+       },
+      //  displayMeeting(audience) {
+      //       console.log(audience.events[0].name)
+            
+      //     return audience.events[0].name
+         
+      //  }
     
       }
   }
@@ -160,6 +179,9 @@ export default {
 
 
 <style scoped>
+.meeting-item{
+  font-size: 8px;
+}
 .btn-choose{
   background-color: #5a567f;
   color: #f6fbff;
