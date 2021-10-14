@@ -112,13 +112,13 @@ export default {
           this.audiences.every(audience =>{
 
             const evenStart = (element) => start.id >= element.startId && start.id < element.endId 
-            console.log(audience.events.some(evenStart));
+           
 
             const evenEnd = (element) => end.id > element.startId && end.id <= element.endId 
-            console.log(audience.events.some(evenEnd));
+           
 
             const evenStartBetween = (element) => element.startId >= start.id && element.startId < end.id
-            console.log(audience.events.some(evenStartBetween));
+            
 
               if(audience.events.some(evenStart)){
                 return true
