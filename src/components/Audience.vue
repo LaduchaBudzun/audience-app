@@ -23,14 +23,11 @@
     </tr>
 
     <tr v-for="(audience,index) in audiences" :key="index">
- 
         <td >{{audience.name}}</td>
   
-  
        <td v-for="(cell,index) in time.slice(1)" :key="index" >
-         <!-- {{cell}} -->
     
-        <div  v-for="(meeting,index) in audience.events" :key="index" class="meeting-item">{{ displayMeeting(meeting, cell)}}</div>
+        <div  v-for="(meeting,index) in audience.events" :key="index" class="meeting-item">{{displayMeeting(meeting, cell)}}</div>
        </td>
   
       </tr>
@@ -120,9 +117,14 @@ export default {
             const evenEnd = (element) => end.id > element.startId && end.id <= element.endId 
             console.log(audience.events.some(evenEnd));
 
+            const evenStartBetween = (element) => element.startId >= start.id && element.startId < end.id
+            console.log(audience.events.some(evenStartBetween));
+
               if(audience.events.some(evenStart)){
                 return true
               }else if(audience.events.some(evenEnd)){
+                return true
+              }else if(audience.events.some(evenStartBetween)){
                 return true
               }else {
                   
@@ -162,7 +164,6 @@ export default {
       //    }
       //  },
        displayMeeting(meeting, cell) {
-            // console.log(audience.events[0].name)
             
            if(cell.id >= meeting.startId && cell.id < meeting.endId ){
               return meeting.name
