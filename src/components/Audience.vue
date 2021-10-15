@@ -25,9 +25,10 @@
     <tr v-for="(audience,index) in audiences" :key="index">
         <td >{{audience.name}}</td>
   
-       <td v-for="(cell,index) in time.slice(1)" :key="index" >
-    
-        <div  v-for="(meeting,index) in audience.events" :key="index" class="meeting-item">{{displayMeeting(meeting, cell)}}</div>
+       <td  class="td" v-for="(cell,index) in time.slice(1)" :key="index" >
+         <draggable group="todosapp"> 
+        <div  group="todosapp" :list="meeting" :style="{width: widthMeeting(meeting) }"  v-for="(meeting,index) in audience.events" :key="index" class="meeting-item">{{displayMeeting(meeting, cell)}}</div>
+       </draggable>
        </td>
   
       </tr>
@@ -41,7 +42,11 @@
 </template>
 
 <script>
+import draggable from 'vuedraggable'
 export default {
+  components:{
+    draggable
+  },
   name: 'Audience',
   data(){
     return{
@@ -165,9 +170,23 @@ export default {
       //  },
        displayMeeting(meeting, cell) {
             
-           if(cell.id >= meeting.startId && cell.id < meeting.endId ){
-              return meeting.name
-            }        
+          //  if(cell.id >= meeting.startId && cell.id < meeting.endId ){
+          //     return meeting.name
+          //   }  
+            
+
+          if(cell.id == meeting.startId ){
+               return meeting.name
+             }  
+          
+       },
+       widthMeeting(meeting){
+         let width = meeting.endId - meeting.startId
+          if(width > 1){
+            width = width*50
+          } 
+          console.log(`${width}px`)
+          return `${width}px`
        }
     
       }
@@ -178,8 +197,18 @@ export default {
 
 
 <style scoped>
+.td{
+
+  
+}
 .meeting-item{
   font-size: 8px;
+  position: absolute;
+  background-color: royalblue;
+  line-height: 50px;
+  left: 0;
+  top: 0;
+  z-index: 10;
 }
 .btn-choose{
   background-color: #5a567f;
@@ -244,10 +273,12 @@ export default {
 }
 .table_blur td {
   border: 1px solid #e3eef7;
-  padding: 10px 15px;
+  
   position: relative;
   transition: all 0.5s ease;
   text-align: center;
+  width: 50px;
+  height: 50px;
 }
 .table_blur tbody:hover td {
   color: transparent;
