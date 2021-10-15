@@ -26,8 +26,8 @@
         <td >{{audience.name}}</td>
   
        <td  class="td" v-for="(cell,index) in time.slice(1)" :key="index" >
-         <draggable group="todosapp"> 
-        <div  group="todosapp" :list="meeting" :style="{width: widthMeeting(meeting) }"  v-for="(meeting,index) in audience.events" :key="index" class="meeting-item">{{displayMeeting(meeting, cell)}}</div>
+         <draggable group="todosapp" :list="audience.events" > 
+        <div :list="meeting" :style="{width: widthMeeting(meeting) }" v-for="(meeting,index) in audience.events" :key="index" class="meeting-item">{{displayMeeting(meeting, cell)}}</div>
        </draggable>
        </td>
   
@@ -170,11 +170,6 @@ export default {
       //  },
        displayMeeting(meeting, cell) {
             
-          //  if(cell.id >= meeting.startId && cell.id < meeting.endId ){
-          //     return meeting.name
-          //   }  
-            
-
           if(cell.id == meeting.startId ){
                return meeting.name
              }  
@@ -184,7 +179,9 @@ export default {
          let width = meeting.endId - meeting.startId
           if(width > 1){
             width = width*50
-          } 
+          } else {
+            width = 50
+          }
           console.log(`${width}px`)
           return `${width}px`
        }
