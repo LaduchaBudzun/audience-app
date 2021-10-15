@@ -202,10 +202,14 @@ export default {
   font-size: 8px;
   position: absolute;
   background-color: royalblue;
+  color: white;
   line-height: 50px;
+  
   left: 0;
   top: 0;
   z-index: 10;
+  border-radius: 10px;
+  cursor: move;
 }
 .btn-choose{
   background-color: #5a567f;
