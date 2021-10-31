@@ -26,7 +26,7 @@
         <td >{{audience.name}}</td>
   
        <td  class="td" v-for="(cell,index) in time.slice(1)" :key="index" >
-         <draggable group="todosapp" :list="audience.events" > 
+          <draggable group="todosapp" :list="audience.events" > 
         <div :list="meeting" :style="{width: widthMeeting(meeting) }" v-for="(meeting,index) in audience.events" :key="index" class="meeting-item">{{displayMeeting(meeting, cell)}}</div>
        </draggable>
        </td>
@@ -117,11 +117,7 @@ export default {
           this.audiences.every(audience =>{
 
             const evenStart = (element) => start.id >= element.startId && start.id < element.endId 
-           
-
             const evenEnd = (element) => end.id > element.startId && end.id <= element.endId 
-           
-
             const evenStartBetween = (element) => element.startId >= start.id && element.startId < end.id
             
 
@@ -194,6 +190,12 @@ export default {
 
 
 <style scoped>
+.on-drag{
+  color: #fff;
+  background-color: rgb(103,174,255);
+  z-index: 10;
+  border: none;
+}
 .td{
 
   
